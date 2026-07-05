@@ -1,25 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=./ui_kits/portfolio/index.html">
-  <link rel="canonical" href="https://bkfsss.github.io/Portfolio/ui_kits/portfolio/index.html">
-  <title>Redirecting to Portfolio</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: Arial, sans-serif;
-      background: #0b0b12;
-      color: #f4f4f4;
-    }
-    a { color: #5ee7ff; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--texture-scan), var(--texture-dots), radial-gradient(120% 80% at 50% 0%, #16040a 0%, var(--void-0) 55%);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+  #holo { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+  #root { position: relative; z-index: 1; max-width: var(--width-page); margin: 0 auto; padding: 0 var(--space-5); }
+  .stack { display: flex; flex-direction: column; gap: var(--space-8); padding-bottom: var(--space-8); }
+  #hud { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+  #hud i { position: absolute; width: 18px; height: 18px; border: 1px solid var(--accent-red); opacity: 0.6; box-shadow: 0 0 6px rgba(255,36,80,0.4); }
+  #hud .tl { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
+  #hud .tr { top: 12px; right: 12px; border-left: 0; border-bottom: 0; }
+  #hud .bl { bottom: 12px; left: 12px; border-right: 0; border-top: 0; }
+  #hud .br { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+</style>
 </head>
 <body>
-  <p>Redirecting to the portfolio page… If it does not load, <a href="./ui_kits/portfolio/index.html">open it here</a>.</p>
+  <canvas id="holo"></canvas>
+  <div id="hud"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+  <script src="./_ds_bundle.js"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/Header.jsx"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/TopNav.jsx"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/EducationSection.jsx"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/ExperienceSection.jsx"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/ProjectsSection.jsx"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/InterestsSection.jsx"></script>
+  <script type="text/babel" src="./ui_kits/portfolio/Footer.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      return (
+        <div className="stack">
+          <window.TopNav />
+          <window.Header />
+          <window.EducationSection />
+          <window.ExperienceSection />
+          <window.ProjectsSection />
+          <window.InterestsSection />
+          <window.Footer />
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+  <script>
+  (function () {
+    var c = document.getElementById('holo');
+    if (!c) return;
+    var ctx = c.getContext('2d');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var W, H, DPR, parts, raf, last;
+    function spawn(anyY) {
+      return {
+        x: Math.round(Math.random() * W),
+        y: anyY ? Math.random() * H : -Math.random() * 200,
+        v: 10 + Math.random() * 30,
+        len: 60 + Math.random() * 170,
+        gap: 4 + Math.random() * 3,
+        a: 0.12 + Math.random() * 0.30,
+        w: Math.random() < 0.2 ? 1.6 : 1,
+        flick: Math.random() * Math.PI * 2,
+        fspd: 1.5 + Math.random() * 3
+      };
+    }
+    function init() {
+      var n = Math.max(30, Math.round(W / 13));
+      parts = [];
+      for (var i = 0; i < n; i++) parts.push(spawn(true));
+    }
+    function resize() {
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      c.style.width = W + 'px'; c.style.height = H + 'px';
+      c.width = W * DPR; c.height = H * DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      init();
+    }
+    function frame(now) {
+      var dt = Math.min((now - last) / 1000, 0.05); last = now;
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        p.y += p.v * dt; p.flick += dt * p.fspd;
+        if (p.y - p.len > H) { parts[i] = spawn(false); continue; }
+        var colFlick = 0.55 + 0.45 * Math.sin(p.flick);
+        for (var s = 0; s < p.len; s += p.gap) {
+          var yy = p.y - s;
+          if (yy < 0) break;
+          var fade = 1 - s / p.len;
+          var a = p.a * fade * colFlick * (0.6 + 0.4 * Math.sin(p.flick * 3 + s * 0.16));
+          if (a <= 0.015) continue;
+          ctx.fillStyle = 'rgba(63,217,224,' + a + ')';
+          ctx.fillRect(p.x, yy, p.w, p.w);
+        }
+      }
+      raf = requestAnimationFrame(frame);
+    }
+    function start() {
+      resize();
+      if (reduce) {
+        for (var i = 0; i < parts.length; i++) {
+          var p = parts[i];
+          for (var s = 0; s < p.len; s += p.gap) {
+            var yy = p.y - s; if (yy < 0) break;
+            ctx.fillStyle = 'rgba(63,217,224,' + (p.a * (1 - s / p.len)) + ')';
+            ctx.fillRect(p.x, yy, p.w, p.w);
+          }
+        }
+        return;
+      }
+      last = performance.now();
+      raf = requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize', function () {
+      if (raf) cancelAnimationFrame(raf);
+      resize();
+      if (!reduce) { last = performance.now(); raf = requestAnimationFrame(frame); }
+    });
+    start();
+  })();
+  </script>
 </body>
 </html>
