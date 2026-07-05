@@ -50,7 +50,7 @@
     width: min(64vw, 680px);
     aspect-ratio: 3 / 2;
     border: 1px solid var(--accent-red-2);
-    box-shadow: var(--glow-red-md), inset 0 0 60px rgba(5,6,9,0.7);
+    box-shadow: inset 0 0 60px rgba(5,6,9,0.7);
     overflow: hidden;
   }
   .frame .img { position: absolute; inset: 0; animation: fadein var(--dur-slow) var(--ease-out); }
@@ -93,7 +93,6 @@
   </div>
 
   <div id="root" class="stage"></div>
-  <div class="note">placeholder frames — drop in real photos (swap each frame's background for an &lt;img&gt;)</div>
 
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -106,15 +105,15 @@
     // Edit `cap`/`meta` to your own captions. If a file is missing, the frame
     // shows the crimson placeholder instead.
     const FRAMES = [
-      { id: '001', src: 'photos/01.jpg', meta: '27mm · f/8', cap: 'night market, saint-laurent', tone: 'radial-gradient(60% 85% at 42% 38%, rgba(255,36,80,0.42), transparent 68%), radial-gradient(22% 24% at 82% 76%, rgba(63,217,224,0.3), transparent 70%), #050609' },
-      { id: '002', src: 'photos/02.jpg', meta: '16mm · f/8', cap: 'metro, blue hour', tone: 'radial-gradient(65% 80% at 55% 45%, rgba(255,36,80,0.32), transparent 70%), radial-gradient(18% 20% at 20% 30%, rgba(63,217,224,0.28), transparent 70%), #050609' },
-      { id: '003', src: 'photos/03.jpg', meta: '27mm · f/8', cap: 'rooftop, long exposure', tone: 'radial-gradient(70% 90% at 48% 30%, rgba(255,36,80,0.38), transparent 66%), radial-gradient(24% 26% at 78% 82%, rgba(63,217,224,0.22), transparent 70%), #050609' },
-      { id: '004', src: 'photos/04.jpg', meta: '27mm · f/8', cap: 'gameplay still — night city', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
-      { id: '005', src: 'photos/05.jpg', meta: '27mm · f/8', cap: 'street, neon reflections', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
-    {id: '006', src: 'photos/06.jpg', meta: '27mm · f/8', cap: 'alley, neon reflections', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
-    {id: '007', src: 'photos/07.jpg', meta: '27mm · f/8', cap: 'street, neon reflections', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
-    {id: '008', src: 'photos/08.jpg', meta: '27mm · f/8', cap: 'street, neon reflections', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
-    
+      { id: '001', src: 'photos/01.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 85% at 42% 38%, rgba(255,36,80,0.42), transparent 68%), radial-gradient(22% 24% at 82% 76%, rgba(63,217,224,0.3), transparent 70%), #050609' },
+      { id: '002', src: 'photos/02.jpg', meta: '16mm · f/8', cap: 'montréal, blue hour', tone: 'radial-gradient(65% 80% at 55% 45%, rgba(255,36,80,0.32), transparent 70%), radial-gradient(18% 20% at 20% 30%, rgba(63,217,224,0.28), transparent 70%), #050609' },
+      { id: '003', src: 'photos/03.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(70% 90% at 48% 30%, rgba(255,36,80,0.38), transparent 66%), radial-gradient(24% 26% at 78% 82%, rgba(63,217,224,0.22), transparent 70%), #050609' },
+      { id: '004', src: 'photos/04.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+      { id: '005', src: 'photos/05.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+    {id: '006', src: 'photos/06.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+    {id: '007', src: 'photos/07.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+    {id: '008', src: 'photos/08.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+    {id: '009', src: 'photos/09.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
     ];
 
     const KEY = 'baha-gallery-index';
