@@ -2,9 +2,9 @@
 const { SectionLabel, Card, Badge, Divider } = window.BahaSatgunPortfolioDesignSystem_d181b5;
 
 const ITEMS = [
-  { role: 'teaching assistant', org: 'uqam · intro to programming', period: '2025 — now',
-    note: 'Grading, lab hours, and gently un-breaking first-year loops.' },
-  { role: 'freelance web dev', org: 'various small clients', period: '2024 — 2025',
+  { role: 'Alarm Operator', org: 'Becklar', period: 'April 2026 — now',
+    note: 'Analyze and process a high volume of real-time alarm signals under strict security and compliance protocols' },
+  { role: 'freelance web dev', org: 'various small clients', period: '2024 — now',
     note: 'Static sites, a booking form, one very stubborn calendar widget.' },
 ];
 

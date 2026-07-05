@@ -11,10 +11,7 @@
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
   body {
-    background:
-      var(--texture-scan),
-      var(--texture-dots),
-      radial-gradient(120% 90% at 50% 38%, #16040a 0%, var(--void-0) 62%);
+    background: var(--ink-0);
     color: var(--text-primary);
     min-height: 100vh;
     display: flex;
@@ -24,7 +21,7 @@
   /* top bar */
   .bar {
     display: flex; align-items: center; justify-content: space-between;
-    padding: var(--space-5) var(--space-6);
+    padding: var(--space-4) var(--space-6);
   }
   .back {
     display: inline-flex; align-items: center; gap: var(--space-2);
@@ -41,46 +38,40 @@
   .stage {
     flex: 1;
     display: flex; align-items: center; justify-content: center;
-    gap: var(--space-5);
-    padding: 0 var(--space-5) var(--space-6);
+    gap: var(--space-4);
+    padding: 0 var(--space-4) var(--space-5);
   }
-  .frame-wrap { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+  .frame-wrap { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
   .frame {
     position: relative;
-    width: min(64vw, 680px);
+    width: min(88vw, 1120px);
     aspect-ratio: 3 / 2;
-    border: 1px solid var(--accent-red-2);
-    box-shadow: inset 0 0 60px rgba(5,6,9,0.7);
     overflow: hidden;
   }
   .frame .img { position: absolute; inset: 0; animation: fadein var(--dur-slow) var(--ease-out); }
   @keyframes fadein { from { opacity: 0; transform: scale(1.015); } to { opacity: 1; transform: none; } }
-  .corner {
-    position: absolute; width: 14px; height: 14px; border: 1px solid var(--accent-red);
-    opacity: 0.8;
-  }
-  .corner.tl { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
-  .corner.tr { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
-  .corner.bl { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
-  .corner.br { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
-  .meta-tl { position: absolute; top: 14px; left: 18px; font-size: 10px; color: var(--accent-red); letter-spacing: 0.06em; }
   .meta-br { position: absolute; bottom: 14px; right: 18px; font-size: 10px; color: var(--muted-1); letter-spacing: 0.06em; }
   .caption { font-family: var(--font-serif); font-size: var(--size-sm); color: var(--muted-1); text-align: center; }
   /* arrows */
   .arrow {
     width: 46px; height: 46px; flex: none;
     display: inline-flex; align-items: center; justify-content: center;
-    background: transparent; color: var(--paper-0);
-    border: 1px solid var(--line-3); cursor: pointer;
-    font-family: var(--font-mono); font-size: 20px; font-weight: 300;
-    transition: color var(--dur-normal) ease, border-color var(--dur-normal) ease, box-shadow var(--dur-normal) ease;
+    background: transparent; border: 0; color: var(--muted-1); cursor: pointer;
+    font-family: var(--font-mono); font-size: 26px; font-weight: 300;
+    transition: color var(--dur-normal) ease, text-shadow var(--dur-normal) ease;
   }
-  .arrow:hover { color: var(--accent-red); border-color: var(--accent-red); box-shadow: var(--glow-red-sm); }
-  /* dots + counter */
-  .rail { display: flex; align-items: center; gap: var(--space-3); }
-  .dots { display: flex; gap: var(--space-2); }
-  .dot { width: 8px; height: 8px; border: 1px solid var(--accent-red-2); cursor: pointer; transition: background var(--dur-normal) ease, box-shadow var(--dur-normal) ease; }
-  .dot.on { background: var(--accent-red); box-shadow: var(--glow-red-sm); }
+  .arrow:hover { color: var(--accent-red); text-shadow: var(--glow-red-sm); }
+  /* thumbnail carousel + counter */
+  .rail { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); }
+  .thumbs { display: flex; gap: var(--space-2); max-width: min(88vw, 1120px); overflow-x: auto; padding: 2px; }
+  .thumb {
+    width: 64px; height: 42px; flex: none; overflow: hidden; cursor: pointer;
+    opacity: 0.45; filter: grayscale(0.3);
+    transition: opacity var(--dur-normal) ease, filter var(--dur-normal) ease, box-shadow var(--dur-normal) ease;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb:hover { opacity: 0.75; }
+  .thumb.on { opacity: 1; filter: none; box-shadow: 0 0 0 1px var(--accent-red); }
   .counter { font-size: 11px; color: var(--muted-1); letter-spacing: 0.08em; }
   .note { text-align: center; font-size: 10px; color: var(--muted-3); padding-bottom: var(--space-5); }
 </style>
@@ -107,23 +98,23 @@
     const FRAMES = [
       { id: '001', src: 'photos/01.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 85% at 42% 38%, rgba(255,36,80,0.42), transparent 68%), radial-gradient(22% 24% at 82% 76%, rgba(63,217,224,0.3), transparent 70%), #050609' },
       { id: '002', src: 'photos/02.jpg', meta: '16mm · f/8', cap: 'montréal, blue hour', tone: 'radial-gradient(65% 80% at 55% 45%, rgba(255,36,80,0.32), transparent 70%), radial-gradient(18% 20% at 20% 30%, rgba(63,217,224,0.28), transparent 70%), #050609' },
-      { id: '003', src: 'photos/03.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(70% 90% at 48% 30%, rgba(255,36,80,0.38), transparent 66%), radial-gradient(24% 26% at 78% 82%, rgba(63,217,224,0.22), transparent 70%), #050609' },
+      { id: '003', src: 'photos/03.jpg', meta: '27mm · f/8', cap: 'montréal', pos: 'center bottom', tone: 'radial-gradient(70% 90% at 48% 30%, rgba(255,36,80,0.38), transparent 66%), radial-gradient(24% 26% at 78% 82%, rgba(63,217,224,0.22), transparent 70%), #050609' },
       { id: '004', src: 'photos/04.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
       { id: '005', src: 'photos/05.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
     {id: '006', src: 'photos/06.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
     {id: '007', src: 'photos/07.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
     {id: '008', src: 'photos/08.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
     {id: '009', src: 'photos/09.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
-    ];
+   {id: '010', src: 'photos/10.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' }, 
+  {id : '011', src: 'photos/11.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+  {id : '012', src: 'photos/12.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+  {id : '013', src: 'photos/13.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' },
+  {id : '014', src: 'photos/14.jpg', meta: '27mm · f/8', cap: 'montréal', tone: 'radial-gradient(60% 80% at 40% 42%, rgba(255,36,80,0.45), transparent 68%), radial-gradient(26% 30% at 84% 70%, rgba(63,217,224,0.32), transparent 70%), #050609' }, 
+  ];
 
-    const KEY = 'baha-gallery-index';
 
     function Gallery() {
-      const [i, setI] = useState(() => {
-        const v = parseInt(localStorage.getItem(KEY), 10);
-        return Number.isInteger(v) && v >= 0 && v < FRAMES.length ? v : 0;
-      });
-      useEffect(() => { localStorage.setItem(KEY, String(i)); }, [i]);
+      const [i, setI] = useState(0);
 
       const go = useCallback((d) => setI((p) => (p + d + FRAMES.length) % FRAMES.length), []);
       useEffect(() => {
@@ -141,20 +132,19 @@
               <div className="img" key={f.id} style={{ background: f.tone }}>
                 {f.src && (
                   <img src={f.src} alt={f.cap}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: f.pos || 'center', display: 'block' }}
                     onError={(e) => { e.currentTarget.style.display = 'none'; }} />
                 )}
               </div>
-              <span className="corner tl"></span><span className="corner tr"></span>
-              <span className="corner bl"></span><span className="corner br"></span>
-              <div className="meta-tl">#{f.id}</div>
               <div className="meta-br">{f.meta}</div>
             </div>
             <div className="caption">{f.cap}</div>
             <div className="rail">
-              <div className="dots">
+              <div className="thumbs">
                 {FRAMES.map((fr, idx) => (
-                  <span key={fr.id} className={'dot' + (idx === i ? ' on' : '')} onClick={() => setI(idx)}></span>
+                  <div key={fr.id} className={'thumb' + (idx === i ? ' on' : '')} onClick={() => setI(idx)}>
+                    <img src={fr.src} alt={fr.cap} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                  </div>
                 ))}
               </div>
               <span className="counter">{String(i + 1).padStart(2, '0')} / {String(FRAMES.length).padStart(2, '0')}</span>

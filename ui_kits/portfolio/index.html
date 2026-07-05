@@ -18,18 +18,22 @@
   #holo { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
   #root { position: relative; z-index: 1; max-width: var(--width-page); margin: 0 auto; padding: 0 var(--space-5); }
   .stack { display: flex; flex-direction: column; gap: var(--space-8); padding-bottom: var(--space-8); }
-  /* Cyberpunk HUD corner brackets — crimson, framing the viewport */
-  #hud { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
-  #hud i { position: absolute; width: 18px; height: 18px; border: 1px solid var(--accent-red); opacity: 0.6; box-shadow: 0 0 6px rgba(255,36,80,0.4); }
-  #hud .tl { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
-  #hud .tr { top: 12px; right: 12px; border-left: 0; border-bottom: 0; }
-  #hud .bl { bottom: 12px; left: 12px; border-right: 0; border-top: 0; }
-  #hud .br { bottom: 12px; right: 12px; border-left: 0; border-top: 0; }
+  #alt-holo {
+    position: fixed; left: 0; top: 50%; transform: translateY(-50%);
+    width: calc(50vw - (var(--width-page) / 2) + 160px); height: 100vh;
+    object-fit: cover;
+    z-index: 0; pointer-events: none;
+    mix-blend-mode: screen; opacity: 0.85;
+    filter: contrast(1.4) saturate(1.15) brightness(1.05);
+    -webkit-mask-image: linear-gradient(to right, black 0%, black 30%, transparent 100%);
+    mask-image: linear-gradient(to right, black 0%, black 30%, transparent 100%);
+  }
+  @media (max-width: 1300px) { #alt-holo { display: none; } }
 </style>
 </head>
 <body>
   <canvas id="holo"></canvas>
-  <div id="hud"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+  <video id="alt-holo" src="../../assets/hologram-alt.mp4" autoplay muted loop playsinline></video>
   <div id="root"></div>
   <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
   <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -58,32 +62,38 @@
     }
     ReactDOM.createRoot(document.getElementById('root')).render(<App />);
   </script>
-  <!-- Holographic cyan data-rain: dense, slow, dotted data-columns that
-       flicker as they descend — a projected hologram, not falling stars. -->
+  <!-- Holographic cyan static: soft, grainy speckle clusters that flicker
+       in place like scan noise — flanking clouds, not falling rain. -->
   <script>
   (function () {
     var c = document.getElementById('holo');
     if (!c) return;
     var ctx = c.getContext('2d');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var W, H, DPR, parts, raf, last;
-    function spawn(anyY) {
-      return {
-        x: Math.round(Math.random() * W),
-        y: anyY ? Math.random() * H : -Math.random() * 200,
-        v: 10 + Math.random() * 30,          // slow descent
-        len: 60 + Math.random() * 170,       // long dotted column
-        gap: 4 + Math.random() * 3,          // dot spacing
-        a: 0.12 + Math.random() * 0.30,
-        w: Math.random() < 0.2 ? 1.6 : 1,
-        flick: Math.random() * Math.PI * 2,
-        fspd: 1.5 + Math.random() * 3
-      };
-    }
-    function init() {
-      var n = Math.max(30, Math.round(W / 13));   // dense hologram field
-      parts = [];
-      for (var i = 0; i < n; i++) parts.push(spawn(true));
+    var W, H, DPR, specks, raf;
+    // Grain covers the full viewport top-to-bottom, weighted denser toward
+    // the left/right edges (echoing the scan-noise clouds around the
+    // hologram figure) but still present everywhere, not just in patches.
+    function buildSpecks() {
+      specks = [];
+      var candidates = Math.round((W * H) / 800);
+      var leftGutter = Math.max(0, W / 2 - 360);   // clear of the hologram video's column
+      for (var i = 0; i < candidates; i++) {
+        var x = Math.random() * W;
+        var y = Math.random() * H;
+        if (x < leftGutter) continue;
+        var edge = Math.abs(x - W / 2) / (W / 2);        // 0 center → 1 at edges
+        var weight = 0.12 + 0.58 * Math.pow(edge, 1.6);   // sparse everywhere, a bit denser at edges
+        if (Math.random() > weight) continue;
+        specks.push({
+          x: x,
+          y: y,
+          base: 0.10 + Math.random() * 0.30,
+          w: Math.random() < 0.2 ? 3 : 2,
+          seed: Math.random() * Math.PI * 2,
+          fspd: 0.5 + Math.random() * 1.2
+        });
+      }
     }
     function resize() {
       DPR = Math.min(window.devicePixelRatio || 1, 2);
@@ -91,48 +101,33 @@
       c.style.width = W + 'px'; c.style.height = H + 'px';
       c.width = W * DPR; c.height = H * DPR;
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      init();
+      buildSpecks();
+    }
+    function draw(now) {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < specks.length; i++) {
+        var s = specks[i];
+        var flicker = 0.55 + 0.45 * Math.abs(Math.sin(s.seed + now * 0.0004 * s.fspd));
+        var jitter = 0.88 + 0.12 * Math.sin(s.seed * 1.7 + now * 0.0002);   // slow, smooth shimmer
+        var a = s.base * flicker * jitter;
+        if (a <= 0.012) continue;
+        ctx.fillStyle = 'rgba(120,180,255,' + a + ')';
+        ctx.fillRect(s.x, s.y, s.w, s.w);
+      }
     }
     function frame(now) {
-      var dt = Math.min((now - last) / 1000, 0.05); last = now;
-      ctx.clearRect(0, 0, W, H);
-      for (var i = 0; i < parts.length; i++) {
-        var p = parts[i];
-        p.y += p.v * dt; p.flick += dt * p.fspd;
-        if (p.y - p.len > H) { parts[i] = spawn(false); continue; }
-        var colFlick = 0.55 + 0.45 * Math.sin(p.flick);   // whole-column flicker
-        for (var s = 0; s < p.len; s += p.gap) {
-          var yy = p.y - s;
-          if (yy < 0) break;
-          var fade = 1 - s / p.len;                       // brighter at the head
-          var a = p.a * fade * colFlick * (0.6 + 0.4 * Math.sin(p.flick * 3 + s * 0.16));
-          if (a <= 0.015) continue;
-          ctx.fillStyle = 'rgba(63,217,224,' + a + ')';
-          ctx.fillRect(p.x, yy, p.w, p.w);
-        }
-      }
+      draw(now);
       raf = requestAnimationFrame(frame);
     }
     function start() {
       resize();
-      if (reduce) {
-        for (var i = 0; i < parts.length; i++) {
-          var p = parts[i];
-          for (var s = 0; s < p.len; s += p.gap) {
-            var yy = p.y - s; if (yy < 0) break;
-            ctx.fillStyle = 'rgba(63,217,224,' + (p.a * (1 - s / p.len)) + ')';
-            ctx.fillRect(p.x, yy, p.w, p.w);
-          }
-        }
-        return;
-      }
-      last = performance.now();
+      if (reduce) { draw(0); return; }
       raf = requestAnimationFrame(frame);
     }
     window.addEventListener('resize', function () {
       if (raf) cancelAnimationFrame(raf);
       resize();
-      if (!reduce) { last = performance.now(); raf = requestAnimationFrame(frame); }
+      if (!reduce) raf = requestAnimationFrame(frame);
     });
     start();
   })();

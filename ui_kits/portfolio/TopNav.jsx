@@ -19,10 +19,6 @@ function TopNav() {
       }}
         onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent-red)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--paper-0)'; }}>
-        <span style={{
-          width: 7, height: 7, background: 'var(--accent-red)', flex: 'none',
-          boxShadow: 'var(--glow-red-sm)', animation: 'hudblink 1.8s steps(1) infinite',
-        }}></span>
         Portfolio
       </a>
       <div style={{ display: 'flex', gap: 'var(--space-3)', alignItems: 'center' }}>
@@ -30,7 +26,6 @@ function TopNav() {
         <Button href="resume.pdf" variant="outline" size="sm" target="_blank" rel="noreferrer">resume</Button>
       <Button href="mailto:bahasatgun1@gmail.com" variant="outline" size="sm" target="_blank">contact</Button>
       </div>
-      <style>{`@keyframes hudblink { 0%,60%{opacity:1} 61%,100%{opacity:0.25} }`}</style>
     </nav>
   );
 }
