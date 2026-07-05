@@ -11,7 +11,7 @@ function EducationSection() {
         onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--muted-2)'; }}
         onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--paper-0)'; }}>
         <img src="../../assets/logo_uqam.jpg" alt="UQAM" style={{ width: 58, height: 34, objectFit: 'contain', borderRadius: 'var(--radius-3)' }} />
-        <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--size-md)' }}>CS @ UQAM</span>
+        <span style={{ fontFamily: 'var(--font-serif)', fontSize: 'var(--size-md)' }}>SWE @ UQAM</span>
       </a>
     </section>
   );
