@@ -1,0 +1,78 @@
+/* ============================================================
+   COLORS — grayscale monochrome, extracted from the source site
+   (bg #000, text #fff, hover gray rgb(109,106,106))
+   The brand is deliberately monochrome: white ink on black paper,
+   with a muted-gray ramp for de-emphasis and hover states.
+   ============================================================ */
+:root {
+  /* --- Ink ramp (dark surfaces, darkest → lightest) --- */
+  --ink-0:  #000000;   /* page background — the source uses pure black */
+  --ink-1:  #0a0a0a;   /* raised surface */
+  --ink-2:  #141414;   /* card surface */
+  --ink-3:  #1f1f1f;   /* card surface, hovered */
+  --ink-4:  #2a2a2a;   /* input / control fill */
+
+  /* --- Paper ramp (light values on dark) --- */
+  --paper-0: #ffffff;  /* primary text, the brand white */
+  --paper-1: #e8e8e8;  /* slightly dimmed white */
+
+  /* --- Muted grays (de-emphasis + hover) --- */
+  --muted-1: #a3a3a3;  /* secondary text */
+  --muted-2: #6d6a6a;  /* the source hover gray */
+  --muted-3: #4a4a4a;  /* tertiary / disabled text */
+  --muted-4: #333333;  /* faint dividers */
+
+  /* --- Cyberpunk / Mikoshi accents ---
+     Calibrated to the profile picture: a hot crimson figure dissolving
+     into particles against near-black, with sparse cyan data-glints.
+     RED is the primary live accent; CYAN is the secondary sparkle.
+     The base stays monochrome — use accent sparingly, glow don't flood. */
+  --accent-red:      #ff2450;   /* the figure crimson — PRIMARY accent */
+  --accent-red-2:    #c8163c;   /* deeper crimson (rest / borders) */
+  --accent-red-ink:  #2a0711;   /* red wash on a dark fill */
+  --accent-magenta:  #ff2e6d;   /* pink-magenta highlight (same family) */
+  --accent-cyan:     #3fd9e0;   /* teal glint — SECONDARY, used sparingly */
+  --accent-cyan-2:   #1f8b93;   /* dimmer cyan */
+  --accent-cyan-ink: #082226;   /* cyan wash on a dark fill */
+
+  /* --- Void ramp (near-black ground — the profile picture is almost
+     pure black, with only the faintest cool cast) --- */
+  --void-0: #050609;   /* page void — near-black */
+  --void-1: #0c0e13;   /* raised void surface */
+  --void-2: #14161d;   /* void panel / slider stage */
+
+  /* --- Lines & hairlines (semi-transparent white) --- */
+  --line-1: rgba(255, 255, 255, 0.12);  /* default border */
+  --line-2: rgba(255, 255, 255, 0.06);  /* faint border */
+  --line-3: rgba(255, 255, 255, 0.24);  /* emphasized border */
+
+  /* --- Dotted-grid texture (the signature background) ---
+     Dots carry a faint crimson cast so the grid reads as the
+     particle mesh from the profile picture. */
+  --dot-color: rgba(255, 64, 96, 0.10);
+  --dot-size: 24px;
+
+  /* ---------- Semantic aliases ---------- */
+  --bg-page:        var(--void-0);
+  --bg-surface:     var(--ink-2);
+  --bg-surface-alt: var(--ink-1);
+  --bg-hover:       var(--ink-3);
+  --bg-control:     var(--ink-4);
+
+  --text-primary:   var(--paper-0);
+  --text-secondary: var(--muted-1);
+  --text-muted:     var(--muted-2);
+  --text-disabled:  var(--muted-3);
+
+  --border-default: var(--line-1);
+  --border-faint:   var(--line-2);
+  --border-strong:  var(--line-3);
+
+  /* Interactive: links rest white and charge to crimson on hover
+     (the source's fade-on-hover, re-tuned to the figure red). */
+  --link-rest:  var(--paper-0);
+  --link-hover: var(--accent-red);
+
+  --accent:     var(--accent-red);
+  --focus-ring: rgba(255, 36, 80, 0.7);
+}

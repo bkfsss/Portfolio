@@ -1,0 +1,50 @@
+/* ============================================================
+   TYPOGRAPHY
+   Two families, mixed exactly as the source does:
+   - MONO (JetBrains Mono) for labels, nav, UI, section headers —
+     lowercase, the "terminal" voice.
+   - SERIF (Times New Roman) for content lines & names — the
+     literary counterweight.
+   Base weight is LIGHT (300), matching the source `font-weight:300`.
+   ============================================================ */
+:root {
+  /* --- Families --- */
+  --font-mono:  'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-serif: 'Times New Roman', Times, Georgia, serif;
+
+  /* --- Weights (light-first, matching the source) --- */
+  --weight-light:   300;
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-bold:    700;
+
+  /* --- Type scale (px) --- */
+  --size-2xs: 11px;   /* micro labels, kbd */
+  --size-xs:  12px;
+  --size-sm:  14px;   /* section labels, body-small (source: 14px) */
+  --size-md:  16px;   /* body */
+  --size-lg:  20px;   /* name / lead (source #Name: 20px) */
+  --size-xl:  28px;
+  --size-2xl: 40px;
+  --size-3xl: 64px;   /* display */
+  --size-4xl: 96px;
+
+  /* --- Line heights --- */
+  --leading-tight:  1.1;
+  --leading-snug:   1.3;
+  --leading-normal: 1.7;   /* source body line-height */
+
+  /* --- Letter spacing (mono labels ride wide & lowercase) --- */
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.08em;
+  --tracking-wider:  0.18em;   /* uppercased mono eyebrows */
+
+  /* ---------- Semantic type roles ---------- */
+  --text-display:  var(--weight-light) var(--size-3xl)/var(--leading-tight) var(--font-serif);
+  --text-title:    var(--weight-light) var(--size-2xl)/var(--leading-snug)  var(--font-serif);
+  --text-name:     var(--weight-light) var(--size-lg)/var(--leading-snug)   var(--font-mono);
+  --text-body:     var(--weight-light) var(--size-md)/var(--leading-normal) var(--font-serif);
+  --text-label:    var(--weight-light) var(--size-sm)/var(--leading-snug)   var(--font-mono);
+  --text-mono-sm:  var(--weight-light) var(--size-xs)/var(--leading-snug)   var(--font-mono);
+}

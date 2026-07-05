@@ -1,0 +1,48 @@
+<!-- @dsCard group="Components" viewport="700x260" name="Actions — Button & IconButton" subtitle="Solid / outline / ghost, sizes, icons" -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin:0; background:var(--ink-0); padding:26px; }
+  .grid { display:flex; flex-direction:column; gap:22px; }
+  .row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .cap { font-family:var(--font-mono); font-weight:300; font-size:10px; color:var(--muted-2); text-transform:uppercase; letter-spacing:0.18em; width:74px; flex:none; }
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="../../_ds_bundle.js"></script>
+  <script type="text/babel">
+    const { Button, IconButton } = window.BahaSatgunPortfolioDesignSystem_d181b5;
+    function Demo() {
+      return (
+        <div className="grid">
+          <div className="row"><span className="cap">solid</span>
+            <Button variant="solid">view work</Button>
+            <Button variant="solid" size="sm">download</Button>
+            <Button variant="solid" disabled>disabled</Button>
+          </div>
+          <div className="row"><span className="cap">outline</span>
+            <Button variant="outline">about</Button>
+            <Button variant="outline" size="sm">contact</Button>
+          </div>
+          <div className="row"><span className="cap">ghost</span>
+            <Button variant="ghost">skip</Button>
+            <Button variant="ghost" size="sm">more</Button>
+          </div>
+          <div className="row"><span className="cap">icon</span>
+            <IconButton label="GitHub"><img src="../../assets/icons8-github-50.png" width="20" alt="" /></IconButton>
+            <IconButton label="LinkedIn"><img src="../../assets/linkedin-square-icon.png" width="18" alt="" /></IconButton>
+          </div>
+        </div>
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+  </script>
+</body>
+</html>

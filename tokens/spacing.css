@@ -1,0 +1,24 @@
+/* ============================================================
+   SPACING & SIZING
+   8px-based rhythm. Includes the specific values seen in the
+   source (8px & 10px gaps, the 24px dot pitch).
+   ============================================================ */
+:root {
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;    /* source .EducationBox gap */
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  24px;   /* dot-grid pitch */
+  --space-6:  32px;
+  --space-7:  48px;
+  --space-8:  64px;
+  --space-9:  96px;
+  --space-10: 128px;
+
+  /* Content widths */
+  --measure-narrow:  38ch;   /* tight reading column */
+  --measure-prose:   62ch;   /* body prose */
+  --width-page:      720px;   /* the portfolio is a slim center column */
+  --width-wide:      1080px;
+}
