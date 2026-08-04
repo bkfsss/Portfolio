@@ -2,7 +2,7 @@
 
 Personal portfolio site: [bkfsss.github.io/Portfolio](https://bkfsss.github.io/Portfolio)
 
-A single-page dark, terminal-inspired portfolio with a photography gallery, built with React (in-browser Babel, no build step) and plain CSS.
+A single-page dark, terminal-inspired portfolio with a photography gallery, built with React and plain CSS.
 
 ## Structure
 
@@ -12,6 +12,4 @@ A single-page dark, terminal-inspired portfolio with a photography gallery, buil
 - `styles.css`, `tokens/` — design tokens (colors, type, spacing, effects) and global styles
 - `ds-bundle.js` — compiled UI primitives (buttons, cards, badges, etc.) used across the site
 
-## Running locally
 
-Serve the repo root with any static file server and open `index.html` — no build step required.
