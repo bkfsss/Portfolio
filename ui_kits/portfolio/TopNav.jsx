@@ -1,9 +1,7 @@
 /* global React */
 const { Button } = window.BahaSatgunPortfolioDesignSystem_d181b5;
 
-// TopNav — a slim HUD-style header bar. Left: a crimson status dot + mono
-// wordmark. Right: the Gallery + Resume buttons.
-// Drop your resume at ui_kits/portfolio/resume.pdf (or repoint the href).
+
 function TopNav() {
   return (
     <nav style={{
